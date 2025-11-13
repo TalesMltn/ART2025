@@ -21,54 +21,27 @@
             <?php echo csrf_field(); ?>
 
             <div class="space-y-4">
-                <!-- ARTESANO -->
+
+                <!-- CLIENTE FIJO -->
                 <div>
-                    <label for="artisan_id" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user mr-2 text-indigo-500"></i>Cliente
+                    </label>
+                    <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-700">
+                        <?php echo e($clientName); ?> (Tú)
+                        <input type="hidden" name="client_id" value="<?php echo e($clientId); ?>">
+                    </div>
+                </div>
+
+                <!-- ARTESANO FIJO -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
                         <i class="fas fa-hammer mr-2 text-indigo-500"></i>Artesano
                     </label>
-
-                    <?php if(auth()->user()->isArtisan() && auth()->user()->artisan): ?>
-                        <!-- ARTESANO: SOLO VE SU NOMBRE (NO SELECT) -->
-                        <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-700">
-                            <?php echo e(auth()->user()->name); ?> - <?php echo e(auth()->user()->artisan->shop_name); ?>
-
-                            <input type="hidden" name="artisan_id" value="<?php echo e(auth()->user()->artisan->id); ?>">
-                        </div>
-                    <?php else: ?>
-                        <!-- CLIENTE: ELIGE CUALQUIER ARTESANO -->
-                        <select 
-                            id="artisan_id" 
-                            name="artisan_id" 
-                            required 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 <?php $__errorArgs = ['artisan_id'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                        >
-                            <option value="">Selecciona un artesano</option>
-                            <?php $__currentLoopData = $artisans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $artisan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($artisan->id); ?>" <?php echo e(old('artisan_id') == $artisan->id ? 'selected' : ''); ?>>
-                                    <?php echo e($artisan->user->name); ?> - <?php echo e($artisan->shop_name); ?>
-
-                                </option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                    <?php endif; ?>
-
-                    <?php $__errorArgs = ['artisan_id'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                        <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
-                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
+                    <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-700">
+                        <?php echo e($artisanName); ?> (Tú)
+                        <input type="hidden" name="artisan_id" value="<?php echo e($artisanId); ?>">
+                    </div>
                 </div>
 
                 <!-- TÍTULO -->

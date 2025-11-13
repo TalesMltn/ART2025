@@ -21,38 +21,27 @@
             @csrf
 
             <div class="space-y-4">
-                <!-- ARTESANO -->
+
+                <!-- CLIENTE FIJO -->
                 <div>
-                    <label for="artisan_id" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user mr-2 text-indigo-500"></i>Cliente
+                    </label>
+                    <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-700">
+                        {{ $clientName }} (Tú)
+                        <input type="hidden" name="client_id" value="{{ $clientId }}">
+                    </div>
+                </div>
+
+                <!-- ARTESANO FIJO -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
                         <i class="fas fa-hammer mr-2 text-indigo-500"></i>Artesano
                     </label>
-
-                    @if (auth()->user()->isArtisan() && auth()->user()->artisan)
-                        <!-- ARTESANO: SOLO VE SU NOMBRE (NO SELECT) -->
-                        <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-700">
-                            {{ auth()->user()->name }} - {{ auth()->user()->artisan->shop_name }}
-                            <input type="hidden" name="artisan_id" value="{{ auth()->user()->artisan->id }}">
-                        </div>
-                    @else
-                        <!-- CLIENTE: ELIGE CUALQUIER ARTESANO -->
-                        <select 
-                            id="artisan_id" 
-                            name="artisan_id" 
-                            required 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 @error('artisan_id') border-red-500 @enderror"
-                        >
-                            <option value="">Selecciona un artesano</option>
-                            @foreach ($artisans as $artisan)
-                                <option value="{{ $artisan->id }}" {{ old('artisan_id') == $artisan->id ? 'selected' : '' }}>
-                                    {{ $artisan->user->name }} - {{ $artisan->shop_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    @endif
-
-                    @error('artisan_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <div class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-700">
+                        {{ $artisanName }} (Tú)
+                        <input type="hidden" name="artisan_id" value="{{ $artisanId }}">
+                    </div>
                 </div>
 
                 <!-- TÍTULO -->

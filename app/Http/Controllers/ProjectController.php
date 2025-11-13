@@ -55,35 +55,53 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $artisans = Artisan::all();
-        return view('projects.publish', compact('artisans'));
+        $user = Auth::user();
+    
+        // Cliente: si es cliente, usa su Client; si no, usa su Artisan como cliente
+        $client = $user->isClient() ? $user->client : $user->artisan;
+        $clientId = $client?->id;
+        $clientName = $client?->name ?? $user->name;
+    
+        // Artesano: si es artesano, usa su Artisan; si no, usa su Client como artesano
+        $artisan = $user->isArtisan() ? $user->artisan : $user->client;
+        $artisanId = $artisan?->id;
+        $artisanName = $artisan?->name ?? $user->name;
+    
+        $shopName = optional($artisan)->shop_name ?? '';
+        return view('projects.publish', compact(
+            'clientId', 'clientName',
+            'artisanId', 'artisanName'
+        ));
     }
-
     /**
      * Guardar nuevo proyecto (solo clientes)
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
-            'artisan_id' => 'required|exists:artisans,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'nullable|numeric|min:0',
         ]);
 
+        // Cliente y Artesano = el mismo usuario (según su rol)
+        $client = $user->isClient() ? $user->client : $user->artisan;
+        $artisan = $user->isArtisan() ? $user->artisan : $user->client;
+
         Project::create([
-            'client_id' => Auth::id(),
-            'artisan_id' => $request->artisan_id,
+            'client_id' => $client?->id,
+            'artisan_id' => $artisan?->id,
             'title' => $request->title,
             'description' => $request->description,
             'price' => $request->price ?? null,
-            'status' => 'pending', // ← SIEMPRE INICIA COMO PENDING
+            'status' => 'pending',
         ]);
 
         return redirect()->route('projects.index')
             ->with('success', '¡Proyecto publicado con éxito!');
     }
-
     /**
      * Mostrar formulario de edición (solo artesano dueño)
      */

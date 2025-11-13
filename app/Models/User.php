@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property-read \App\Models\Artisan|null $artisan
@@ -54,5 +55,24 @@ class User extends Authenticatable
     public function client()
     {
         return $this->hasOne(Client::class, 'user_id');
+    }
+
+    // =====================
+    // PROCEDIMIENTOS ALMACENADOS
+    // =====================
+    /**
+     * Ejecuta un procedimiento almacenado en la base de datos.
+     *
+     * @param string $procedureName
+     * @param array $params
+     * @return array
+     */
+    public static function callProcedure(string $procedureName, array $params = []): array
+    {
+        // Generar placeholders según la cantidad de parámetros (?, ?, ?)
+        $placeholders = implode(',', array_fill(0, count($params), '?'));
+
+        // Ejecutar el procedimiento almacenado
+        return DB::select("CALL {$procedureName}($placeholders)", $params);
     }
 }
