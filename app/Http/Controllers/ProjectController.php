@@ -57,51 +57,56 @@ class ProjectController extends Controller
     {
         $user = Auth::user();
     
-        // Cliente: si es cliente, usa su Client; si no, usa su Artisan como cliente
-        $client = $user->isClient() ? $user->client : $user->artisan;
-        $clientId = $client?->id;
-        $clientName = $client?->name ?? $user->name;
+        // Cliente: si tiene perfil Client → lo usa, si no → usa su perfil Artisan como "cliente"
+        $clientModel = $user->client ?? $user->artisan;
+        $clientId    = $clientModel?->id;
     
-        // Artesano: si es artesano, usa su Artisan; si no, usa su Client como artesano
-        $artisan = $user->isArtisan() ? $user->artisan : $user->client;
-        $artisanId = $artisan?->id;
-        $artisanName = $artisan?->name ?? $user->name;
+        // Artesano: si tiene perfil Artisan → lo usa, si no → usa su perfil Client como "artesano"
+        $artisanModel = $user->artisan ?? $user->client;
+        $artisanId    = $artisanModel?->id;
     
-        $shopName = optional($artisan)->shop_name ?? '';
+        // NOMBRE SIEMPRE DEL USUARIO (Client y Artisan NO tienen name)
+        $clientName  = $user->name;
+        $artisanName = $user->name;
+    
+        // Nombre de tienda (solo si es artesano)
+        $shopName = $user->artisan?->shop_name ?? '';
+    
         return view('projects.publish', compact(
             'clientId', 'clientName',
-            'artisanId', 'artisanName'
+            'artisanId', 'artisanName',
+            'shopName'
         ));
     }
     /**
      * Guardar nuevo proyecto (solo clientes)
      */
     public function store(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = auth()->user()->fresh(['client', 'artisan']);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'nullable|numeric|min:0',
-        ]);
+    $request->validate([
+        'title'       => 'required|string|max:255',
+        'description' => 'required|string',
+        'price'       => 'nullable|numeric|min:0',
+        'status'      => 'required|in:open,active,completed,cancelled', // ← EXACTO
+    ]);
 
-        // Cliente y Artesano = el mismo usuario (según su rol)
-        $client = $user->isClient() ? $user->client : $user->artisan;
-        $artisan = $user->isArtisan() ? $user->artisan : $user->client;
+    $clientId  = $user->client?->id ?? $user->artisan?->id;
+    $artisanId = $user->artisan?->id ?? $user->client?->id;
 
-        Project::create([
-            'client_id' => $client?->id,
-            'artisan_id' => $artisan?->id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price ?? null,
-            'status' => 'pending',
-        ]);
+    Project::create([
+        'client_id'   => $clientId,
+        'artisan_id'  => $artisanId,
+        'title'       => $request->title,
+        'description' => $request->description,
+        'price'       => $request->price,
+        'status'      => $request->status, // ← ya validado arriba
+    ]);
 
-        return redirect()->route('projects.index')
-            ->with('success', '¡Proyecto publicado con éxito!');
-    }
+    return redirect()->route('projects.index')
+        ->with('success', '¡Proyecto publicado con éxito!');
+}
     /**
      * Mostrar formulario de edición (solo artesano dueño)
      */
@@ -144,4 +149,31 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')
             ->with('success', 'Proyecto actualizado correctamente.');
     }
+    public function show(Project $project)
+    {
+        // Esto evita TODOS los errores de "user on null" en la vista
+        $project->loadMissing(['client.user', 'artisan.user']);
+    
+        return view('projects.show', compact('project'));
+    }
+    public function rate(Request $request, Project $project)
+{
+    $request->validate([
+        'rating'  => 'required|integer|min:1|max:5',
+        'comment' => 'nullable|string|max:1000'
+    ]);
+
+    if ($project->status !== 'completed' || 
+        auth()->user()->client?->id !== $project->client?->id ||
+        $project->rating !== null) {
+        return back()->with('error', 'No puedes valorar este proyecto.');
+    }
+
+    $project->update([
+        'rating' => $request->rating,
+        'rating_comment' => $request->comment
+    ]);
+
+    return back()->with('success', '¡Gracias por tu valoración!');
+}
 }

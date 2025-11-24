@@ -79,25 +79,25 @@
             <!-- MADERA TALLADA -->
             @elseif($slug === 'madera-tallada')
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/madera/mueble.jpg') }}" alt="Mueble pequeño" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/madera/mueble.png') }}" alt="Mueble pequeño" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Muebles pequeños</h2>
                     <p class="text-sm text-gray-600 mt-2">Mesitas, banquitos y repisas talladas.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/madera/utensilio.jpg') }}" alt="Utensilio" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/madera/utensilio.png') }}" alt="Utensilio" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Utensilios</h2>
                     <p class="text-sm text-gray-600 mt-2">Cucharas, morteros y tablas de madera.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/madera/figura.jpg') }}" alt="Figura decorativa" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/madera/figura.png') }}" alt="Figura decorativa" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Figuras decorativas</h2>
                     <p class="text-sm text-gray-600 mt-2">Animales, dioses andinos y máscaras.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/madera/escultura.jpg') }}" alt="Escultura" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/madera/escultura.png') }}" alt="Escultura" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Esculturas</h2>
                     <p class="text-sm text-gray-600 mt-2">Piezas únicas talladas a mano.</p>
                 </div>
@@ -105,7 +105,7 @@
             <!-- MATES BURILADOS -->
             @elseif($slug === 'mates-burilados')
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center col-span-full md:col-span-1">
-                    <img src="{{ asset('images/mates/burilado.jpg') }}" alt="Mate burilado" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/mates/burilado.png') }}" alt="Mate burilado" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Mates de calabaza grabados a mano</h2>
                     <p class="text-sm text-gray-600 mt-2">Escenas de la vida andina, naturaleza y tradiciones.</p>
                 </div>
@@ -113,25 +113,25 @@
             <!-- JOYERÍA Y BISUTERÍA -->
             @elseif($slug === 'joyeria-bisuteria')
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/joyeria/collar.jpg') }}" alt="Collar" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/joyeria/collar.png') }}" alt="Collar" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Collares</h2>
                     <p class="text-sm text-gray-600 mt-2">Plata 950, piedras naturales y semillas.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/joyeria/pulsera.jpg') }}" alt="Pulsera" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/joyeria/pulsera.png') }}" alt="Pulsera" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Pulseras</h2>
                     <p class="text-sm text-gray-600 mt-2">Diseños con chakanas, soles y lunas.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/joyeria/anillo.jpg') }}" alt="Anillo" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/joyeria/anillo.png') }}" alt="Anillo" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Anillos</h2>
                     <p class="text-sm text-gray-600 mt-2">Hechos con plata y piedras semipreciosas.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/joyeria/aretes.jpg') }}" alt="Aretes" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/joyeria/aretes.png') }}" alt="Aretes" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Aretes</h2>
                     <p class="text-sm text-gray-600 mt-2">Ligeros y con detalles artesanales.</p>
                 </div>
@@ -139,25 +139,25 @@
             <!-- CUERO Y TALABARTERÍA -->
             @elseif($slug === 'cuero-talabarteria')
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cuero/bolso.jpg') }}" alt="Bolso" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cuero/bolso.png') }}" alt="Bolso" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Bolsos</h2>
                     <p class="text-sm text-gray-600 mt-2">Cuero curtido vegetal, cosido a mano.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cuero/cartera.jpg') }}" alt="Cartera" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cuero/cartera.png') }}" alt="Cartera" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Carteras</h2>
                     <p class="text-sm text-gray-600 mt-2">Diseños prácticos y duraderos.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cuero/cinturon.jpg') }}" alt="Cinturón" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cuero/cinturon.png') }}" alt="Cinturón" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Cinturones</h2>
                     <p class="text-sm text-gray-600 mt-2">Con hebillas de bronce o alpaca.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cuero/zapato.jpg') }}" alt="Zapato" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cuero/zapato.png') }}" alt="Zapato" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Zapatos</h2>
                     <p class="text-sm text-gray-600 mt-2">Estilo tradicional o moderno en cuero.</p>
                 </div>
@@ -165,25 +165,25 @@
             <!-- CESTERÍA Y FIBRAS VEGETALES -->
             @elseif($slug === 'cesteria-fibras-vegetales')
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cesteria/canasta.jpg') }}" alt="Canasta" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cesteria/canasta.png') }}" alt="Canasta" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Canastas</h2>
                     <p class="text-sm text-gray-600 mt-2">De totora, paja o ichu, tejidas a mano.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cesteria/sombrero.jpg') }}" alt="Sombrero" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cesteria/sombrero.png') }}" alt="Sombrero" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Sombreros</h2>
                     <p class="text-sm text-gray-600 mt-2">Protección solar y estilo andino.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cesteria/tapiz.jpg') }}" alt="Tapiz" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cesteria/tapiz.png') }}" alt="Tapiz" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Tapices</h2>
                     <p class="text-sm text-gray-600 mt-2">Decoración mural con fibras naturales.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/cesteria/adorno.jpg') }}" alt="Adorno" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/cesteria/adorno.png') }}" alt="Adorno" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Adornos y utensilios</h2>
                     <p class="text-sm text-gray-600 mt-2">Pequeños objetos funcionales y bellos.</p>
                 </div>
@@ -191,19 +191,19 @@
             <!-- INSTRUMENTOS MUSICALES -->
             @elseif($slug === 'instrumentos-musicales')
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/instrumentos/flauta.jpg') }}" alt="Flauta de caña" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/instrumentos/flauta.png') }}" alt="Flauta de caña" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Flautas de caña</h2>
                     <p class="text-sm text-gray-600 mt-2">Sonido puro y tradicional andino.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/instrumentos/charango.jpg') }}" alt="Charango" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/instrumentos/charango.png') }}" alt="Charango" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Charangos</h2>
                     <p class="text-sm text-gray-600 mt-2">Cuerpo de quirquincho o madera tallada.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/instrumentos/bombo.jpg') }}" alt="Bombo" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/instrumentos/bombo.png') }}" alt="Bombo" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Bombos</h2>
                     <p class="text-sm text-gray-600 mt-2">Percusión profunda para fiestas tradicionales.</p>
                 </div>
@@ -211,25 +211,25 @@
             <!-- ARTE DECORATIVO Y SOUVENIR -->
             @elseif($slug === 'arte-decorativo')
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/arte/figurilla.jpg') }}" alt="Figurilla" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/arte/figurilla.png') }}" alt="Figurilla" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Figurillas</h2>
                     <p class="text-sm text-gray-600 mt-2">Personajes, animales y dioses en miniatura.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/arte/escultura.jpg') }}" alt="Escultura" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/arte/escultura.png') }}" alt="Escultura" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Esculturas</h2>
                     <p class="text-sm text-gray-600 mt-2">Piezas de arte en madera, piedra o arcilla.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/arte/adorno.jpg') }}" alt="Adorno" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/arte/adorno.png') }}" alt="Adorno" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Adornos</h2>
                     <p class="text-sm text-gray-600 mt-2">Detalles para el hogar con alma andina.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition hover:bg-yellow-50 text-center">
-                    <img src="{{ asset('images/arte/recuerdo.jpg') }}" alt="Recuerdo" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="{{ asset('images/arte/recuerdo.png') }}" alt="Recuerdo" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h2 class="text-xl font-bold text-[#5a2d0c]">Recuerdos</h2>
                     <p class="text-sm text-gray-600 mt-2">Souvenirs auténticos de la región.</p>
                 </div>

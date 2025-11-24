@@ -18,12 +18,12 @@
             <p class="mt-2 text-lg text-gray-600">Explora y gestiona los proyectos disponibles</p>
 
             <!-- BOTÓN PUBLICAR -->
-            <?php if(auth()->check()): ?>
-                <a href="<?php echo e(route('projects.publish')); ?>" 
-                   class="mt-4 inline-block bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition duration-200 shadow-lg font-semibold">
-                    <i class="fas fa-plus mr-2"></i> Publicar Proyecto
-                </a>
-            <?php endif; ?>
+            <?php if(Auth::check()): ?>
+            <a href="<?php echo e(route('projects.publish')); ?>" 
+               class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition transform hover:scale-105">
+                <i class="fas fa-plus mr-3"></i> Publicar Proyecto
+            </a>
+        <?php endif; ?>
         </div>
 
         <!-- BOTÓN VOLVER -->
@@ -85,9 +85,10 @@
                         </p>
 
                         <div class="mt-4 flex gap-3">
-                            <a href="#" class="text-indigo-600 hover:text-indigo-500 text-sm font-medium">
-                                Ver Detalle <i class="fas fa-eye ml-1"></i>
-                            </a>
+                            <a href="<?php echo e(route('projects.show', $project)); ?>" 
+                            class="text-indigo-600 hover:text-indigo-500 text-sm font-medium">
+                             Ver Detalle <i class="fas fa-eye ml-1"></i>
+                         </a>
 
                             <?php if(auth()->user()->isArtisan() && $project->artisan_id == auth()->user()->artisan->id): ?>
                                 <a href="<?php echo e(route('projects.edit', $project)); ?>" 
