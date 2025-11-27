@@ -2,54 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\Rating;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class RatingController extends Controller
 {
-    public function index()
+    public function gallery()
     {
-        // Muestra todas las valoraciones del usuario autenticado
-        $ratings = Auth::user()->ratings()->with('project')->latest()->get();
-        
-        return view('ratings.index', compact('ratings'));
+        $projects = Project::where('status', 'completed')
+            ->with(['client.user', 'artisan.user', 'rating'])  // AÑADE 'rating' AQUÍ
+            ->latest('updated_at')
+            ->paginate(12);
+    
+        return view('ratings.gallery', compact('projects'));
     }
 
-    public function create($project)
+    public function create(Project $project)
     {
-        // Mostrar formulario para valorar un proyecto específico
-        $project = \App\Models\Project::findOrFail($project);
+        if (!auth()->user()?->isClient()) {
+            return redirect('/gallery')->with('error', 'Solo clientes pueden valorar');
+        }
+    
+        if ($project->status !== 'completed') {
+            return redirect('/gallery')->with('error', 'El proyecto no está completado');
+        }
+    
+        // QUITAMOS ESTO: || $project->rating
+        // Ahora permite entrar aunque ya haya valoración (para editar)
+    
         return view('ratings.create', compact('project'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'project_id' => 'required|exists:projects,id',
-            'artisan_id' => 'required|exists:artisans,id',
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string'
-        ]);
-
-        // Asegura que el usuario no valore dos veces el mismo proyecto
-        $existing = Rating::where('user_id', Auth::id())
-                          ->where('project_id', $request->project_id)
-                          ->first();
-
-        if ($existing) {
-            return back()->with('error', 'Ya has valorado este proyecto.');
-        }
-
-        $rating = Rating::create([
-            'user_id' => Auth::id(),
-            'project_id' => $request->project_id,
-            'artisan_id' => $request->artisan_id,
-            'score' => $request->rating,
-            'comment' => $request->comment,
-        ]);
-
-        return redirect()->route('projects.show', $rating->project_id)
-                         ->with('success', '¡Valoración enviada con éxito!');
+    public function store(Request $request, $projectId)
+{
+    if (!auth()->user()?->isClient()) {
+        return redirect('/gallery')->with('error', 'Solo clientes pueden valorar');
     }
+
+    $project = Project::findOrFail($projectId);
+
+    if ($project->status !== 'completed') {
+        return back()->with('error', 'El proyecto no está completado');
+    }
+
+    $request->validate([
+        'score'   => 'required|integer|min:1|max:5',
+        'comment' => 'nullable|string|max:1000',
+    ]);
+
+    // ACTUALIZA si ya existe, o crea si no existe
+    Rating::updateOrCreate(
+        ['project_id' => $project->id],
+        [
+            'user_id'     => auth()->id(),
+            'artisan_id'  => $project->artisan_id,
+            'score'       => $request->score,
+            'comment'     => $request->comment,
+        ]
+    );
+
+    return redirect('/gallery')->with('success', '¡Valoración guardada con éxito!');
+}
 }

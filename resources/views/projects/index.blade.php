@@ -1,157 +1,173 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Proyectos - Plataforma Artesanos Junín</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="bg-gradient-to-br from-purple-50 to-indigo-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- ENCABEZADO -->
-        <div class="text-center mb-10">
-            <div class="mx-auto h-20 w-20 bg-indigo-500 rounded-2xl flex items-center justify-center mb-6">
-                <i class="fas fa-list text-3xl text-white"></i>
-            </div>
-            <h2 class="text-3xl font-bold text-gray-900">Lista de Proyectos</h2>
-            <p class="mt-2 text-lg text-gray-600">Explora y gestiona los proyectos disponibles</p>
+@extends('layouts.app')
+@section('title', 'Mis Proyectos y Ofertas - Artesanos Junín')
+@section('content')
+<div class="container mx-auto p-6 max-w-7xl">
 
-            <!-- BOTÓN PUBLICAR -->
-            @if(Auth::check())
-            <a href="{{ route('projects.publish') }}" 
-               class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition transform hover:scale-105">
-                <i class="fas fa-plus mr-3"></i> Publicar Proyecto
-            </a>
-        @endif
-        </div>
-
-        <!-- BOTÓN VOLVER -->
-        <div class="mb-8 text-left">
-            <a href="{{ url('/') }}" 
-               class="inline-flex items-center bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md hover:bg-indigo-700 transition">
-                <i class="fas fa-arrow-left mr-2"></i> Volver al Inicio
-            </a>
-        </div>
-
-        <!-- MIS PROYECTOS -->
-        @if($myProjects->count() > 0)
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">
-                @if(auth()->user()->isClient())
-                    Mis Proyectos Publicados
+    <!-- CABECERA -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12">
+        <div>
+            <h1 class="text-4xl font-extrabold text-gray-900">
+                @if(auth()->user()->isClient() && !auth()->user()->isArtisan())
+                    Mis Proyectos como Cliente
+                @elseif(auth()->user()->isArtisan() && !auth()->user()->isClient())
+                    Mis Trabajos y Servicios Ofrecidos
                 @else
-                    Mis Proyectos Asignados
+                    Mis Proyectos y Servicios
                 @endif
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            </h1>
+            <p class="text-lg text-gray-600 mt-2">Gestiona tus proyectos y ofertas activas</p>
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+            <a href="{{ url('/') }}" class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg transition">
+                Volver al Inicio
+            </a>
+            @if(auth()->user()->isClient() || auth()->user()->isArtisan())
+                <a href="{{ route('projects.publish') }}" class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg transition">
+                    Publicar Nuevo Proyecto
+                </a>
+            @endif
+        </div>
+    </div>
+
+    <!-- MIS PROYECTOS ACTIVOS -->
+    @if($myProjects->count() > 0)
+        <div class="mb-20">
+            <h2 class="text-3xl font-bold text-indigo-700 mb-8">
+                Mis proyectos activos
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($myProjects as $project)
-                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-l-4 
-                        @if(auth()->user()->isArtisan() && $project->artisan_id == auth()->user()->artisan->id) border-green-500 
-                        @else border-blue-500 @endif">
-                        <h4 class="text-xl font-semibold text-gray-900">{{ $project->title }}</h4>
-                        <p class="mt-2 text-gray-600">{{ Str::limit($project->description, 100) }}</p>
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-200 relative">
 
-                        <!-- USUARIO (CORREGIDO) -->
-                        <p class="mt-2 text-sm text-gray-500">
-                            <i class="fas fa-user mr-1"></i>
-                            @if(auth()->user()->isClient() && $project->artisan?->user)
-                                Artesano: <strong>{{ $project->artisan->user->name }}</strong>
-                            @elseif(auth()->user()->isArtisan() && $project->client?->user)
-                                Cliente: <strong>{{ $project->client->user->name }}</strong>
-                            @else
-                                <em>Usuario no disponible</em>
-                            @endif
-                        </p>
-
-                        <!-- PRECIO -->
-                        @if($project->price)
-                            <p class="mt-1 text-sm text-indigo-600 font-medium">
-                                <i class="fas fa-dollar-sign mr-1"></i> S/ {{ number_format($project->price, 2) }}
-                            </p>
-                        @else
-                            <p class="mt-1 text-sm text-gray-400 italic">Precio por definir</p>
+                        <!-- MENSAJE ANTIFRAUDE (visible para ambos) -->
+                        @if($project->artisan_id && $project->status !== 'completed')
+                            <div class="absolute inset-0 bg-black bg-opacity-10 pointer-events-none rounded-2xl"></div>
+                            <div class="absolute top-4 right-4 bg-gradient-to-r from-red-600 to-orange-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg z-10">
+                                TRABAJO EN CURSO - Solo el artesano puede cambiar el estado
+                            </div>
                         @endif
 
-                        <!-- ESTADO -->
-                        <p class="mt-1 text-sm font-medium 
-                            @if($project->status == 'pending') text-yellow-600
-                            @elseif($project->status == 'active') text-blue-600
-                            @elseif($project->status == 'completed') text-green-600
-                            @else text-red-600 @endif">
-                            <i class="fas fa-circle mr-1 text-xs"></i> 
-                            {{ ucfirst(str_replace('_', ' ', $project->status)) }}
-                        </p>
+                        @if($project->status === 'completed')
+                            <div class="absolute top-4 right-4 bg-gradient-to-r from-green-600 to-emerald-700 text-white px-6 py-3 rounded-full text-lg font-bold shadow-2xl z-10 flex items-center gap-2">
+                                COMPLETADO
+                            </div>
+                        @endif
 
-                        <div class="mt-4 flex gap-3">
-                            <a href="{{ route('projects.show', $project) }}" 
-                            class="text-indigo-600 hover:text-indigo-500 text-sm font-medium">
-                             Ver Detalle <i class="fas fa-eye ml-1"></i>
-                         </a>
+                        <div class="bg-gradient-to-r 
+                            @if($project->status === 'completed') from-green-500 to-emerald-600
+                            @elseif($project->status === 'active') from-blue-500 to-cyan-600
+                            @elseif($project->status === 'pending') from-purple-500 to-pink-600
+                            @else from-gray-500 to-gray-600 @endif 
+                            text-white p-6">
+                            <h3 class="text-xl font-bold">{{ $project->title }}</h3>
+                            <p class="text-sm opacity-90 mt-2">
+                                @if(auth()->user()->isClient())
+                                    Artesano: {{ $project->artisan?->user?->name ?? 'Sin asignar' }}
+                                @else
+                                    Cliente: {{ $project->client?->user?->name ?? 'Sin cliente' }}
+                                @endif
+                            </p>
+                        </div>
 
-                            @if(auth()->user()->isArtisan() && $project->artisan_id == auth()->user()->artisan->id)
-                                <a href="{{ route('projects.edit', $project) }}" 
-                                   class="text-green-600 hover:text-green-500 text-sm font-medium">
-                                    Editar <i class="fas fa-edit ml-1"></i>
+                        <div class="p-6">
+                            <p class="text-gray-700 mb-4 line-clamp-3">{{ Str::limit($project->description, 120) }}</p>
+
+                            <div class="flex items-center justify-between mb-5">
+                                <span class="inline-block px-4 py-2 rounded-full text-sm font-bold
+                                    @if($project->status === 'completed') bg-green-100 text-green-800
+                                    @elseif($project->status === 'active') bg-blue-100 text-blue-800
+                                    @elseif($project->status === 'pending') bg-purple-100 text-purple-800
+                                    @else bg-yellow-100 text-yellow-800 @endif">
+                                    {{ ucfirst(str_replace('_', ' ', $project->status)) }}
+                                </span>
+                                @if($project->price)
+                                    <span class="text-lg font-bold text-gray-800">S/ {{ number_format($project->price, 0, ',', '.') }}</span>
+                                @endif
+                            </div>
+
+                            <div class="flex gap-3">
+                                <a href="{{ route('projects.show', $project) }}" 
+                                   class="flex-1 text-center bg-indigo-600 text-white py-3.5 rounded-lg font-bold hover:bg-indigo-700 transition">
+                                    Ver Detalles
                                 </a>
-                            @endif
+
+                                <!-- BOTÓN EDITAR: solo cliente si está OPEN, solo artesano si ya fue tomado -->
+                                @if(auth()->user()->isClient() && is_null($project->artisan_id) && $project->status === 'open')
+                                    <a href="{{ route('projects.edit', $project) }}" 
+                                       class="px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition">
+                                        Editar Proyecto
+                                    </a>
+                                @endif
+
+                                @if(auth()->user()->isArtisan() && $project->artisan_id == auth()->user()->artisan->id && $project->status !== 'completed')
+                                    <a href="{{ route('projects.edit', $project) }}" 
+                                       class="px-6 py-3.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold rounded-lg transition shadow-lg">
+                                        Cambiar Estado
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-        @endif
+        </div>
+    @endif
 
-        <!-- OTROS PROYECTOS DE ARTESANOS -->
-        @if($otherArtisanProjects->count() > 0)
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">
-                @if(auth()->user()->isClient())
-                    Proyectos Disponibles de Artesanos
-                @else
-                    Proyectos de Otros Artesanos
-                @endif
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($otherArtisanProjects as $project)
-                    <div class="bg-gray-50 p-6 rounded-xl shadow-md border-l-4 border-gray-400 opacity-90 hover:opacity-100 transition">
-                        <h4 class="text-lg font-semibold text-gray-800">{{ $project->title }}</h4>
-                        <p class="mt-2 text-gray-600 text-sm">{{ Str::limit($project->description, 80) }}</p>
+    <!-- PROYECTOS DISPONIBLES PARA TOMAR (solo artesanos) -->
+    @if(auth()->user()->isArtisan() && $publicOpenProjects->count() > 0)
+        <div class="mt-24 pt-12 border-t-8 border-dashed border-yellow-500 bg-gradient-to-b from-yellow-50 to-white rounded-3xl p-12">
+            <h2 class="text-5xl font-extrabold text-yellow-700 mb-8 text-center">
+                ¡HAY {{ $publicOpenProjects->count() }} TRABAJO{{ $publicOpenProjects->count() > 1 ? 'S' : '' }} DISPONIBLE{{ $publicOpenProjects->count() > 1 ? 'S' : '' }}!
+            </h2>
+            <p class="text-center text-2xl text-gray-700 mb-12">Estos clientes necesitan un artesano ahora mismo</p>
 
-                        <!-- USUARIOS (CORREGIDO) -->
-                        <p class="mt-2 text-xs text-gray-500">
-                            <i class="fas fa-user mr-1"></i> 
-                            Cliente: 
-                            <strong>
-                                {{ $project->client?->user?->name ?? 'No asignado' }}
-                            </strong>
-                        </p>
-                        <p class="mt-1 text-xs text-gray-500">
-                            <i class="fas fa-hammer mr-1"></i> 
-                            Artesano: 
-                            <strong>
-                                {{ $project->artisan?->user?->name ?? 'No asignado' }}
-                            </strong>
-                        </p>
-
-                        @if($project->price)
-                            <p class="mt-1 text-xs text-indigo-600 font-medium">
-                                <i class="fas fa-dollar-sign mr-1"></i> S/ {{ number_format($project->price, 2) }}
-                            </p>
-                        @endif
-                        <p class="mt-1 text-xs font-medium text-gray-600">
-                            <i class="fas fa-circle mr-1 text-xs"></i> 
-                            {{ ucfirst(str_replace('_', ' ', $project->status)) }}
-                        </p>
-                        <a href="#" class="mt-3 inline-block text-indigo-600 hover:text-indigo-500 text-xs font-medium">
-                            Ver Detalle <i class="fas fa-eye ml-1"></i>
-                        </a>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                @foreach($publicOpenProjects as $project)
+                    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-8 border-yellow-500 hover:border-orange-600 transition-all transform hover:scale-105">
+                        <div class="bg-gradient-to-r from-yellow-500 to-orange-600 text-white p-10 text-center">
+                            <h3 class="text-3xl font-extrabold mb-4">{{ $project->title }}</h3>
+                            <p class="text-xl">Cliente: <strong>{{ $project->client?->user?->name }}</strong></p>
+                            @if($project->price)
+                                <p class="text-5xl font-extrabold mt-6">S/ {{ number_format($project->price, 0, ',', '.') }}</p>
+                            @endif
+                        </div>
+                        <div class="p-10 bg-yellow-50 text-center">
+                            <p class="text-gray-800 mb-8">{{ $project->description }}</p>
+                            <form action="{{ route('projects.take', $project) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit"
+                                        class="inline-block bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold text-2xl px-16 py-6 rounded-3xl shadow-2xl transform hover:scale-110 transition">
+                                    TOMAR ESTE PROYECTO AHORA
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 @endforeach
             </div>
-        @else
-            <div class="text-center py-12">
-                <p class="text-gray-600 text-lg">No hay proyectos de otros artesanos disponibles.</p>
-                <p class="text-gray-500 text-sm mt-2">¡Sé el primero en publicar uno!</p>
-            </div>
-        @endif
-    </div>
-</body>
-</html>
+        </div>
+    @endif
+
+    <!-- SIN PROYECTOS -->
+    @if($myProjects->count() === 0 && (!auth()->user()->isArtisan() || $publicOpenProjects->count() === 0))
+        <div class="text-center py-32 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
+            <h3 class="text-5xl font-bold text-gray-800 mb-6">
+                Todavía no tienes proyectos activos
+            </h3>
+            <p class="text-2xl text-gray-600 mb-12">
+                @if(auth()->user()->isArtisan())
+                    Cuando un cliente publique un proyecto, aparecerá aquí para que lo tomes
+                @else
+                    ¡Publica tu primer proyecto y encuentra al mejor artesano!
+                @endif
+            </p>
+            @if(auth()->user()->isClient() || auth()->user()->isArtisan())
+                <a href="{{ route('projects.publish') }}" class="inline-block bg-indigo-600 text-white px-16 py-8 rounded-3xl font-bold text-3xl hover:bg-indigo-700 transition shadow-2xl transform hover:scale-110">
+                    Publicar mi primer proyecto
+                </a>
+            @endif
+        </div>
+    @endif
+
+</div>
+@endsection

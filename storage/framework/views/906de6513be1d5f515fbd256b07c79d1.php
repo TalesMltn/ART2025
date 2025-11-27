@@ -112,10 +112,10 @@
                         Califica trabajos completados y construye una reputación sólida en la comunidad de artesanos.
                     </p>
                 </div>
-                <a href="<?php echo e(route('ratings.index')); ?>" 
-                   class="bg-[#5a2d0c] text-white font-bold py-2 px-4 rounded-xl hover:bg-[#8b4513] text-center mt-4 transition">
-                    Mis Valoraciones
-                </a>
+                <a href="<?php echo e(url('/gallery')); ?>" 
+                class="inline-block bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-110">
+                 Ver Galería de Trabajos
+             </a>
             </div>
 
             <!-- Ventaja 4: Productos Artesanales -->

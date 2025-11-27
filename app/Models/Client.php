@@ -19,10 +19,18 @@ class Client extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class); // ← SOLO ESTA LÍNEA
-        // Si quieres ser explícito, también puedes poner:
-        // return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
+
+    /**
+     * ←←←←←←←←←←←←←←←← AÑADE ESTO AQUÍ ←←←←←←←←←←←←←←←←
+     * Un cliente tiene muchos proyectos
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'client_id');
+    }
+    // ←←←←←←←←←←←←←←←← FIN ←←←←←←←←←←←←←←←←
 
     public static function callProcedure(string $procedureName, array $params = []): array
     {

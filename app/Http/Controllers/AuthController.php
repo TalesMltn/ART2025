@@ -24,39 +24,41 @@ class AuthController extends Controller
     // REGISTRAR USUARIO
     // ==================================
     public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
-            'role' => 'required|in:client,artisan',
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:8|confirmed',
+        'role' => 'required|in:client,artisan',
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => $request->role,
+    ]);
+
+    // Crea perfil básico (opcional, puedes dejarlo)
+    if ($request->role === 'artisan') {
+        $user->artisan()->create([
+            'shop_name' => $request->name . ' Artesanías',
+            'bio' => 'Artesano tradicional de Junín.',
+            'address' => 'Junín, Perú',
         ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
+    } else {
+        $user->client()->create([
+            'address' => 'Junín, Perú',
+            'phone' => null,
         ]);
-
-        // CREAR PERFIL AL REGISTRARSE
-        if ($request->role === 'artisan') {
-            $user->artisan()->create([
-                'shop_name' => $request->name . ' Artesanías',
-                'bio' => 'Artesano tradicional de Junín.',
-                'address' => 'Junín, Perú',
-                'bank_details' => null,
-            ]);
-        } else {
-            $user->client()->create([
-                'address' => 'Junín, Perú',
-                'phone' => null,
-            ]);
-        }
-
-        Auth::login($user);
-        return redirect()->route('profile.create');
     }
+
+    Auth::login($user);
+
+    // ¡AHORA SÍ VA DIRECTO AL HOME!
+    return redirect()->route('home')
+        ->with('success', '¡Registro exitoso! Bienvenido a la plataforma.');
+}
     // ==================================
     // MOSTRAR FORMULARIO DE LOGIN
     // ==================================

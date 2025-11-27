@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne; // ← ESTE IMPORT ES CLAVE
 use Illuminate\Support\Facades\DB;
 
 class Project extends Model
@@ -14,6 +15,7 @@ class Project extends Model
         'description',
         'price',
         'status',
+
     ];
 
     protected $casts = [
@@ -22,8 +24,6 @@ class Project extends Model
 
     /**
      * Relación con el artesano
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Artisan>
      */
     public function artisan()
     {
@@ -32,8 +32,6 @@ class Project extends Model
 
     /**
      * Relación con el cliente
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Client>
      */
     public function client()
     {
@@ -42,8 +40,6 @@ class Project extends Model
 
     /**
      * Relación con los mensajes del proyecto
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Message>
      */
     public function messages()
     {
@@ -51,18 +47,20 @@ class Project extends Model
     }
 
     /**
+     * RELACIÓN NUEVA: La valoración que recibió este proyecto
+     * Un proyecto → solo tiene una valoración (hasOne)
+     */
+    public function rating(): HasOne
+    {
+        return $this->hasOne(Rating::class, 'project_id');
+    }
+
+    /**
      * Ejecuta un procedimiento almacenado en la base de datos.
-     *
-     * @param string $procedureName
-     * @param array $params
-     * @return array
      */
     public static function callProcedure(string $procedureName, array $params = []): array
     {
-        // Genera los placeholders (?, ?, ?) según la cantidad de parámetros
         $placeholders = implode(',', array_fill(0, count($params), '?'));
-
-        // Ejecuta el procedimiento almacenado
         return DB::select("CALL {$procedureName}($placeholders)", $params);
     }
 }

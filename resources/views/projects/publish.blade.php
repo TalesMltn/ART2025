@@ -1,113 +1,82 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicar Proyecto - Plataforma Artesanos Junín</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="bg-gradient-to-br from-purple-50 to-indigo-100 min-h-screen flex items-center justify-center py-12">
-    <div class="max-w-2xl w-full bg-white p-10 rounded-2xl shadow-2xl">
+{{-- resources/views/projects/publish.blade.php --}}
+@extends('layouts.app')
 
-        <div class="text-center mb-8">
-            <div class="mx-auto h-24 w-24 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <i class="fas fa-plus-circle text-5xl text-white"></i>
-            </div>
-            <h2 class="text-3xl font-bold text-gray-900">Publicar Nuevo Proyecto</h2>
-            <p class="text-gray-600">Tú eres cliente y artesano del proyecto</p>
+@section('title', 'Publicar Nuevo Proyecto - Artesanos Junín')
+
+@section('content')
+<div class="container mx-auto p-6 max-w-4xl">
+    <div class="bg-white rounded-3xl shadow-2xl p-10">
+
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-gray-900">Publicar Nuevo Proyecto</h1>
+            <p class="text-xl text-gray-600 mt-3">Busca al mejor artesano para tu idea</p>
         </div>
 
-        <!-- Mensajes -->
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-xl mb-6 text-center font-bold">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-xl mb-8 text-center font-bold text-lg">
                 {{ session('success') }}
             </div>
         @endif
 
-        @if($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl mb-6">
-                <strong>Errores:</strong>
-                <ul class="list-disc list-inside mt-2">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('projects.store') }}" class="space-y-7">
+        <form action="{{ route('projects.store') }}" method="POST" class="space-y-8">
             @csrf
 
-            <!-- CLIENTE -->
-            <div class="bg-blue-50 p-6 rounded-xl border border-blue-200 text-center">
-                <p class="font-bold text-blue-800 mb-1">Cliente (tú)</p>
-                <p class="text-2xl font-bold text-gray-800">{{ $clientName }}</p>
+            <!-- Cliente (solo informativo) -->
+            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-8 rounded-2xl border-2 border-indigo-200 text-center">
+                <p class="text-indigo-800 font-bold text-lg">Tú eres el cliente</p>
+                <p class="text-3xl font-extrabold text-gray-800 mt-2">{{ auth()->user()->name }}</p>
             </div>
 
-            <!-- ARTESANO -->
-            <div class="bg-green-50 p-6 rounded-xl border border-green-200 text-center">
-                <p class="font-bold text-green-800 mb-1">Artesano (tú)</p>
-                <p class="text-2xl font-bold text-gray-800">
-                    {{ $artisanName }}
-                    @if($shopName) <span class="text-green-700">({{ $shopName }})</span> @endif
-                </p>
-            </div>
-
-            <!-- TÍTULO -->
+            <!-- Título -->
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                    Título del Proyecto
-                </label>
-                <input name="title" type="text" required placeholder="Ej: Mesa de madera tallada"
-                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 @error('title') border-red-500 @enderror"
-                       value="{{ old('title') }}">
-                @error('title') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                <label class="block text-lg font-bold text-gray-800 mb-3">Título del Proyecto</label>
+                <input type="text" name="title" required value="{{ old('title') }}"
+                       class="w-full px-6 py-4 rounded-xl border-2 @error('title') border-red-500 @else border-gray-300 @enderror focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 text-lg"
+                       placeholder="Ej: Mesa de madera con tallado personalizado">
+                @error('title') <p class="text-red-600 text-sm mt-2">{{ $message }}</p> @enderror
             </div>
 
-            <!-- DESCRIPCIÓN -->
+            <!-- Descripción -->
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                    Descripción Detallada
-                </label>
-                <textarea name="description" required rows="6" placeholder="Materiales, medidas, estilo, plazo..."
-                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 resize-none @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
-                @error('description') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                <label class="block text-lg font-bold text-gray-800 mb-3">Descripción Detallada</label>
+                <textarea name="description" required rows="8"
+                          class="w-full px-6 py-4 rounded-xl border-2 @error('description') border-red-500 @else border-gray-300 @enderror focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 text-lg resize-none"
+                          placeholder="Materiales, medidas, estilo, colores, plazo de entrega...">{{ old('description') }}</textarea>
+                @error('description') <p class="text-red-600 text-sm mt-2">{{ $message }}</p> @enderror
             </div>
 
-            <!-- PRECIO -->
+            <!-- Precio (opcional) -->
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                    Presupuesto Estimado (opcional)
-                </label>
-                <input name="price" type="number" step="0.01" placeholder="500.00"
-                       class="w-full px-4 py-3 border border-gray-300 rounded-xl @error('price') border-red-500 @enderror"
-                       value="{{ old('price') }}">
+                <label class="block text-lg font-bold text-gray-800 mb-3">Presupuesto Estimado (S/)</label>
+                <input type="number" step="0.01" name="price" value="{{ old('price') }}"
+                       class="w-full px-6 py-4 rounded-xl border-2 border-gray-300 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 text-lg"
+                       placeholder="Ej: 850.00 (opcional)">
+                @error('price') <p class="text-red-600 text-sm mt-2">{{ $message }}</p> @enderror
             </div>
 
-            <!-- ESTADO - 100% COMPATIBLE CON TU MIGRACIÓN -->
+            <!-- Estado inicial -->
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                    Estado Inicial del Proyecto
-                </label>
-                <select name="status" class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500">
-                    <option value="open" selected>Abierto</option>
-                    <option value="active">En curso</option>
+                <label class="block text-lg font-bold text-gray-800 mb-3">Estado del Proyecto</label>
+                <select name="status" class="w-full px-6 py-4 rounded-xl border-2 border-gray-300 focus:border-indigo-600 text-lg">
+                    <option value="open" selected>Abierto (buscando artesano)</option>
+                    <option value="pending">Pendiente</option>
+                    <option value="active">En progreso</option>
                     <option value="completed">Completado</option>
-                    <option value="cancelled">Cancelado</option>
                 </select>
             </div>
 
-            <!-- BOTONES -->
-            <div class="flex gap-4 pt-8">
-                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition shadow-lg transform hover:scale-105">
+            <!-- Botones -->
+            <div class="flex gap-6 pt-8">
+                <button type="submit"
+                        class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold text-2xl py-6 rounded-2xl shadow-xl transform hover:scale-105 transition">
                     PUBLICAR PROYECTO
                 </button>
-                <a href="{{ route('projects.index') }}" class="px-8 py-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium rounded-xl transition">
+                <a href="{{ route('projects.index') }}"
+                   class="px-10 py-6 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded-2xl transition">
                     Cancelar
                 </a>
             </div>
         </form>
     </div>
-</body>
-</html>
+</div>
+@endsection

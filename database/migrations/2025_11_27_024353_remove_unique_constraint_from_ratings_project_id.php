@@ -9,22 +9,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ratings', function (Blueprint $table) {
-            if (!Schema::hasColumn('ratings', 'user_id')) {
-                $table->foreignId('user_id')
-                      ->after('id')
-                      ->constrained()
-                      ->onDelete('cascade');
-            }
+            // Quita el índice único del project_id
+            $table->dropUnique(['project_id']);
         });
     }
 
     public function down(): void
     {
         Schema::table('ratings', function (Blueprint $table) {
-            if (Schema::hasColumn('ratings', 'user_id')) {
-                $table->dropForeign(['user_id']);
-                $table->dropColumn('user_id');
-            }
+            // Si quieres volver atrás (opcional)
+            $table->unique('project_id');
         });
     }
 };

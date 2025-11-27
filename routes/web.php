@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;  // Para Auth::check()
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -30,6 +30,14 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 // =============================
+// VALORACIONES PÚBLICAS
+// =============================
+Route::get('/gallery', [RatingController::class, 'gallery'])
+    ->name('ratings.gallery');
+
+Route::get('/ratings', fn() => redirect()->route('ratings.gallery'));
+
+// =============================
 // RUTAS PÚBLICAS
 // =============================
 Route::get('/artisans', [ProfileController::class, 'index'])->name('artisans.index');
@@ -40,45 +48,52 @@ Route::get('/productos', [ProductoController::class, 'index'])->name('productos.
 Route::get('/productos/categoria/{slug}', [ProductoController::class, 'mostrarPorCategoria'])->name('productos.categoria');
 
 // =============================
-// RUTAS AUTENTICADAS (clientes y artesanos)
+// RUTAS AUTENTICADAS
 // =============================
 Route::middleware('auth')->group(function () {
 
     // HOME
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    // === PROYECTOS - UNA SOLA VEZ, DENTRO DE auth ===
+    // === PERFIL ===
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('show');
+        Route::get('/create', [ProfileController::class, 'create'])->name('create');
+        Route::post('/', [ProfileController::class, 'store'])->name('store');
+        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::match(['put', 'patch'], '/', [ProfileController::class, 'update'])->name('update');
+    });
+
+    // === PROYECTOS ===
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.publish');
-    Route::post('/projects/{project}/rate', [ProjectController::class, 'rate'])
-    ->name('projects.rate');
-
-    // ← AQUÍ ESTÁ TU RUTA BIEN DEFINIDA (NO LA DUPLIQUES NUNCA MÁS)
-    Route::get('/projects/create', [ProjectController::class, 'create'])
-        ->name('projects.publish');
-
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::post('/projects/{project}/take', [ProjectController::class, 'take'])->name('projects.take');
 
     // === MENSAJES ===
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::get('/messages/{id}/send', [MessageController::class, 'showSendForm'])->name('messages.send.form');
     Route::post('/messages/{id}/send', [MessageController::class, 'send'])->name('messages.send');
 
-    // === VALORACIONES ===
-    Route::get('/projects/{project}/ratings/create', [RatingController::class, 'create'])->name('ratings.create');
-    Route::post('/projects/{project}/ratings', [RatingController::class, 'store'])->name('ratings.store');
-    Route::get('/ratings', [RatingController::class, 'index'])->name('ratings.index');
-    Route::get('/ratings/available', [RatingController::class, 'available'])->name('ratings.available');
+    // === VALORACIONES (solo autenticados) ===
+    Route::get('/ratings/pending', [RatingController::class, 'pending'])
+        ->name('ratings.pending');
+
+    Route::get('/ratings/{project}/create', [RatingController::class, 'create'])
+        ->name('ratings.create');
+
+        Route::post('/projects/{project}/rating', [RatingController::class, 'store'])
+        ->name('ratings.store');
 });
 
 // =============================
 // ADMIN
 // =============================
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminController::class, 'users'])->name('users.index');
     Route::delete('/users/{id}', [AdminController::class, 'destroy'])->name('users.destroy');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });

@@ -134,9 +134,7 @@
                             <option value="">Selecciona tu rol</option>
                             <option value="client" {{ old('role') == 'client' ? 'selected' : '' }}>Cliente</option>
                             <option value="artisan" {{ old('role') == 'artisan' ? 'selected' : '' }}>Artesano</option>
-                            @if (request()->has('admin'))
-                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrador</option>
-                            @endif
+                            
                         </select>
                         @error('role')
                             <p class="mt-1 text-xs text-red-600 pl-1">{{ $message }}</p>
