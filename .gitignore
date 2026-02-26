@@ -1,24 +1,47 @@
-*.log
-.DS_Store
+# Laravel estándar (de github/gitignore y Laravel oficial)
+vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
 .env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
+.env.*
 Homestead.json
 Homestead.yaml
+.phpunit.result.cache
+.phpactor.json
+.phpstan/
+phpunit.xml
+/storage/*.key
+/storage/pail
+/public/hot
+/public/storage
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*
+/public/build/*
+/public/mix-manifest.json
+
+# OS y editores
+.DS_Store
 Thumbs.db
+*.log
+*.bak
+*.swp
+*~
+
+# IDEs y editores
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed
+/.sublime-project
+/.sublime-workspace
+auth.json
+
+# Otros comunes
+composer.lock  # Opcional: si no quieres versionar lock, quítalo
+package-lock.json  # Opcional
+yarn.lock
